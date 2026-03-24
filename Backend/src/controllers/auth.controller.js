@@ -19,7 +19,7 @@ const registerUser = async (req, res) => {
     }
 
     const normalizedEmail = email.toLowerCase().trim();
-
+    const normalPaswword = password.trim();
     // 🔹 2. Check if user already exists
 
     const existingUser = await UserModel.findOne({ email: normalizedEmail });
@@ -37,15 +37,16 @@ const registerUser = async (req, res) => {
     const user = await UserModel.create({
       name,
       email: normalizedEmail,
-      password,
+      password:normalPaswword,
       isVerified: false,
       verificationToken,
       verificationTokenExpires: Date.now() + 60 * 60 * 1000 // 1 hour
     });
 
     const verifyLink = `http://localhost:5173/verify-email/${verificationToken}`;
+    
 
-    await sendEmail(
+     sendEmail(
       email,
       "Verify Your Email",
       `
@@ -84,8 +85,12 @@ const registerUser = async (req, res) => {
 
     </div>
   </div>
-  `
-    );
+  `)
+    return res.status(201).json({
+      success: true,
+      message: "Registration successful. Please check your email to verify your account."
+    });
+
 
   } catch (error) {
     if (error.code === 11000 || error?.cause?.code === 11000) {
@@ -355,7 +360,6 @@ const resendVerification = async (req, res) => {
 
     const verifyLink = `http://localhost:5173/verify-email/${verificationToken}`;
 
-
     const emailSent = await sendEmail(
       email,
       "Verify Your Email",
@@ -422,7 +426,7 @@ const refreshAccessToken = async (req, res) => {
     const incomingToken = req.cookies?.refreshToken;
 
     if (!incomingToken) {
-      return res.status(401).json({
+      return res.status(403).json({
         success: false,
         message: "No refresh token"
       });

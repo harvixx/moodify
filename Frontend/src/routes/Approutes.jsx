@@ -1,5 +1,5 @@
 // src/routes/AppRoutes.jsx
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "../features/auth/pages/Login";
 import Register from "../features/auth/pages/Register";
@@ -19,6 +19,7 @@ const AppRoutes = () => {
       <Route path="/verify-notice" element={<VerifyNotice />} />
       <Route path="/verify-email/:token" element={<VerifyEmail />} />
 
+    
       {/* 🔐 Protected */}
       <Route
         path="/dashboard"
@@ -29,8 +30,12 @@ const AppRoutes = () => {
         }
       />
 
-      {/* 🔁 fallback */}
-      <Route path="*" element={<Login />} />
+      {/* 🔁 Root redirect */}
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      
+
+      {/* 🔁 Fallback — unknown routes */}
+      <Route path="*" element={<Navigate to="/login" replace />} />
 
     </Routes>
   );

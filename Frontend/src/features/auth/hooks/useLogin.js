@@ -16,18 +16,15 @@ export const useLogin = () => {
     try {
       await loginUser(formData);
 
-      // 🔥 sync user
-      await fetchUser();
+      // ✅ force=true — /login public route check bypass karega
+      await fetchUser(true);
 
       return { success: true };
 
     } catch (err) {
-      const message =
-        err.response?.data?.message || "Login failed";
-
+      const message = err.response?.data?.message || "Login failed";
       setError(message);
 
-      // 🔥 अगर verify नहीं है
       if (message.toLowerCase().includes("verify")) {
         localStorage.setItem("verifyEmail", formData.email);
         return { success: false, needsVerification: true };
