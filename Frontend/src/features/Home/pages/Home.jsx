@@ -129,7 +129,7 @@ const Home = () => {
             M
           </div>
           <span className="text-sm font-bold tracking-tight">
-            Moodify <span className={subText}>AI</span>
+            Moodify 
           </span>
         </div>
 
