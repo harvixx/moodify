@@ -145,7 +145,7 @@ const Home = () => {
           </span>
         </div>
 
-        {/* ✅ ProfileMenu — no props needed, reads from context */}
+        {/* ✅ ProfileMenu no props needed, reads from context */}
         <ProfileMenu />
       </nav>
 
